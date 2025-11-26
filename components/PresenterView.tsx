@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { SLIDES } from '../constants';
-import { SlideData, SlideType } from '../types';
 import { usePresenterSync } from '../hooks/usePresenterSync';
 import { ChevronRight, Clock, Pause, Play, RotateCcw } from 'lucide-react';
+import { SlideRenderer } from './SlideRenderer';
 
 export const PresenterView: React.FC = () => {
   const [currentPath, setCurrentPath] = useState('/');
@@ -38,9 +38,9 @@ export const PresenterView: React.FC = () => {
     setIsTimerRunning(true);
   };
 
-  // Calculate scale to fit slide in container
-  const SLIDE_WIDTH = 900;
-  const SLIDE_HEIGHT = 600;
+  // Calculate scale to fit slide in container - match main presentation dimensions
+  const SLIDE_WIDTH = 1280;
+  const SLIDE_HEIGHT = 720;
 
   useEffect(() => {
     const calculateScales = () => {
@@ -124,7 +124,7 @@ export const PresenterView: React.FC = () => {
               className="flex-1 bg-slate-50 rounded-lg overflow-hidden shadow-lg border-2 border-amber-500/50 relative flex items-center justify-center"
             >
               <div
-                className="pointer-events-none"
+                className="pointer-events-none flex items-center justify-center"
                 style={{
                   width: `${SLIDE_WIDTH}px`,
                   height: `${SLIDE_HEIGHT}px`,
@@ -132,7 +132,7 @@ export const PresenterView: React.FC = () => {
                   transformOrigin: 'center center'
                 }}
               >
-                <SlidePreview slide={currentSlide} />
+                <SlideRenderer slide={currentSlide} />
               </div>
             </div>
           </div>
@@ -149,7 +149,7 @@ export const PresenterView: React.FC = () => {
                 className="flex-1 bg-slate-50 rounded-lg overflow-hidden shadow-md border border-slate-600 opacity-75 relative flex items-center justify-center"
               >
                 <div
-                  className="pointer-events-none"
+                  className="pointer-events-none flex items-center justify-center"
                   style={{
                     width: `${SLIDE_WIDTH}px`,
                     height: `${SLIDE_HEIGHT}px`,
@@ -157,7 +157,7 @@ export const PresenterView: React.FC = () => {
                     transformOrigin: 'center center'
                   }}
                 >
-                  <SlidePreview slide={nextSlide} />
+                  <SlideRenderer slide={nextSlide} />
                 </div>
               </div>
             ) : (
@@ -191,60 +191,6 @@ export const PresenterView: React.FC = () => {
       <footer className="flex-none p-3 border-t border-slate-700 bg-slate-800 text-center text-sm text-slate-500">
         Usa las flechas del teclado en la ventana principal para navegar
       </footer>
-    </div>
-  );
-};
-
-// Simplified slide preview component
-const SlidePreview: React.FC<{ slide: SlideData }> = ({ slide }) => {
-  return (
-    <div className="bg-slate-50 text-slate-900 p-10 w-[900px] h-[600px] flex flex-col">
-      {/* Title */}
-      {slide.type !== SlideType.INTRO && (
-        <div className="mb-8">
-          <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
-            {slide.title}
-          </h1>
-          {slide.subtitle && (
-            <p className="text-2xl text-slate-500 mt-3">{slide.subtitle}</p>
-          )}
-        </div>
-      )}
-
-      {/* Intro Slide */}
-      {slide.type === SlideType.INTRO && (
-        <div className="flex-1 flex flex-col items-center justify-center text-center">
-          <div className="flex items-center gap-6 mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl flex items-center justify-center">
-              <span className="text-5xl">🏗️</span>
-            </div>
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center">
-              <span className="text-5xl">☁️</span>
-            </div>
-          </div>
-          <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
-            {slide.title}
-          </h1>
-          <p className="text-3xl text-slate-500 mt-6">{slide.subtitle}</p>
-        </div>
-      )}
-
-      {/* Content/Split Slide */}
-      {(slide.type === SlideType.CONTENT || slide.type === SlideType.SPLIT) && (
-        <div className="flex-1">
-          {slide.bullets && (
-            <ul className="space-y-4">
-              {slide.bullets.map((bullet, idx) => (
-                <li key={idx} className="flex items-start gap-4 text-2xl">
-                  <span className="w-3 h-3 rounded-full bg-amber-500 mt-3 flex-shrink-0" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {slide.content && <div className="mt-6">{slide.content}</div>}
-        </div>
-      )}
     </div>
   );
 };
