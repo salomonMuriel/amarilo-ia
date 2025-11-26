@@ -61,7 +61,7 @@ export const visionCampoSlide: SlideData = {
       <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg max-w-2xl flex items-center gap-3">
         <Languages className="w-6 h-6 text-purple-600 shrink-0" />
         <p className="text-sm text-slate-700">
-          <strong>¿Y el lenguaje de obra?</strong> Sí, entiende "chimba", "paila", "ñero" y regionalismos. Los LLMs modernos manejan español colombiano de construcción.
+          <strong>¿Y el lenguaje de obra?</strong> Los LLMs modernos entienden errores gramaticales y jerga de construcción sin problemas.
         </p>
       </div>
 
@@ -70,5 +70,5 @@ export const visionCampoSlide: SlideData = {
       </p>
     </div>
   ),
-  speakerNotes: "La meta no es obligar a 5,000 obreros a usar un portátil. No lo harán. La meta es dejar que usen la herramienta que aman—WhatsApp—y usar un Agente de IA para traducir sus notas de voz en los datos estructurados que nuestra oficina necesita. La arquitectura es simple: WhatsApp se conecta a Azure Communication Services (el puente seguro de Microsoft), que alimenta al agente en Copilot Studio, y este escribe en nuestros sistemas. Y sí, el modelo entiende jerga colombiana de obra—chimba, paila, ñero—los LLMs modernos están entrenados con español de todas las regiones."
+  speakerNotes: "La meta no es obligar a 5,000 obreros a usar un portátil. No lo harán. La meta es dejar que usen la herramienta que aman—WhatsApp—y usar un Agente de IA para traducir sus notas de voz en los datos estructurados que nuestra oficina necesita. La arquitectura es simple: WhatsApp se conecta a Azure Communication Services (el puente seguro de Microsoft), que alimenta al agente en Copilot Studio, y este escribe en nuestros sistemas. Y sí, el modelo entiende errores gramaticales y jerga de construcción sin problemas—los LLMs modernos están entrenados con todo tipo de variantes del español."
 };
