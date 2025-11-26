@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SLIDES } from '../constants';
-import { Menu, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Menu, ChevronLeft, ChevronRight, X, Presentation } from 'lucide-react';
+import { usePresenterSync } from '../hooks/usePresenterSync';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,9 +12,26 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const presenterWindowRef = useRef<Window | null>(null);
 
   const currentSlideIndex = SLIDES.findIndex(s => s.path === location.pathname);
   const currentSlide = SLIDES[currentSlideIndex];
+
+  // Sync slide changes to presenter view
+  usePresenterSync(location.pathname, currentSlideIndex);
+
+  const openPresenterView = () => {
+    const width = 900;
+    const height = 700;
+    const left = window.screenX + window.outerWidth;
+    const top = window.screenY;
+
+    presenterWindowRef.current = window.open(
+      '/presenter.html',
+      'presenter-view',
+      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=no`
+    );
+  };
 
   const handleNext = () => {
     if (currentSlide?.nextPath) navigate(currentSlide.nextPath);
@@ -77,9 +95,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <span className="text-xs text-slate-500">El Maestro de Obra Aumentado</span>
           </div>
         </div>
-        <button onClick={() => setIsMenuOpen(true)} className="p-2 hover:bg-slate-100 rounded-lg transition text-slate-500 hover:text-slate-800">
-          <Menu className="w-6 h-6" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={openPresenterView}
+            className="p-2 hover:bg-slate-100 rounded-lg transition text-slate-500 hover:text-slate-800"
+            title="Abrir Vista del Presentador (P)"
+          >
+            <Presentation className="w-6 h-6" />
+          </button>
+          <button onClick={() => setIsMenuOpen(true)} className="p-2 hover:bg-slate-100 rounded-lg transition text-slate-500 hover:text-slate-800">
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
       </header>
 
       {/* Main Content Area */}
